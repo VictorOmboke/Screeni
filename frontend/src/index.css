@@ -121,6 +121,11 @@ body {
   transform: scale(0.95);
 }
 
+.error-banner {
+  color: #ff5555;
+  text-align: center;
+}
+
 .info-container {
   position: fixed;
   bottom: 30px;
@@ -455,6 +460,7 @@ body {
 
 .delete-modal-msg {
   font-size: 1.3rem;
+  text-align: center;
 }
 
 .delete-modal-btns {
@@ -595,6 +601,7 @@ body {
 
 .result-details {
   padding: 20px;
+  overflow: auto;
 }
 
 .result-title,
@@ -619,6 +626,7 @@ body {
 .result-overview {
   font-weight: 300;
   margin-top: 10px;
+  padding-right: 10px;
 }
 
 .result-add-btn {
@@ -727,7 +735,7 @@ body {
 
 .rando-result-title,
 .rando-result-year {
-  font-size: 2rem;
+  font-size: 2.5rem;
 }
 
 .rando-result-year {
@@ -735,23 +743,23 @@ body {
 }
 
 .rando-result-creator {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 200;
 }
 
 .rando-result-runtime {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 200;
   margin-bottom: 30px;
 }
 
 .rando-result-header {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 500;
   margin-bottom: 10px;
 }
 
 .rando-result-overview {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-weight: 200;
 }
