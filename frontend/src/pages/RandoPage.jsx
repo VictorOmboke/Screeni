@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import api from "../utils/api.js";
 import Navbar from "../components/Navbar.jsx";
 
 export default function Rando() {
@@ -11,22 +12,11 @@ export default function Rando() {
   useEffect(() => {
     const getWatchlist = async () => {
       try {
-        // Get user credentials
-        const accessToken = localStorage.getItem("token");
-
         // Call backend api
-        const response = await fetch("/api/watchlist/", {
-          method: "GET",
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
+        const response = await api.get('/watchlist/');
 
         // Parse data
-        const data = await response.json();
-
-        // Check if response is valid
-        if (!response.ok) {
-          throw new Error(data.message || "Failed to load watchlist");
-        }
+        const data = await response.data;
 
         // Store watchlist
         setWatchlist(data.watchlist);
@@ -50,25 +40,11 @@ export default function Rando() {
       // Select random title from watchlist
       const chosenItem = watchlist[randomIndex];
 
-      // Get user credentials
-      const accessToken = localStorage.getItem("token");
-
       // Get full details for selected title
-      const response = await fetch(
-        `/api/watchlist/media_item/${chosenItem.media_item_id}`,
-        {
-          method: "GET",
-          headers: { Authorization: `Bearer ${accessToken}` },
-        }
-      );
+      const response = await api.get(`/watchlist/media_item/${chosenItem.media_item_id}`);
 
       // Parse data
-      const data = await response.json();
-
-      // Check if response is valid
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to load title details");
-      }
+      const data = await response.data;
 
       // Store data
       setTitleDetails(data.watchlist_item_details);

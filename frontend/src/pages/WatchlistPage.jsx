@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
+import api from "../utils/api.js";
 import { Plus, X, Trash } from "lucide-react";
 
 export default function Watchlist() {
@@ -33,18 +34,10 @@ export default function Watchlist() {
         }
 
         // Make call to backend api
-        const response = await fetch("/api/watchlist/", {
-          method: "GET",
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
+        const response = await api.get("/watchlist/");
 
         // Parse response data
-        const data = await response.json();
-
-        // Check if response is valid
-        if (!response.ok) {
-          throw new Error(data.message || "Unable to get watchlist items");
-        }
+        const data = await response.data;
 
         // Store response
         setWatchlist(data.watchlist);
@@ -58,21 +51,11 @@ export default function Watchlist() {
   // Launch title details modal
   const handleCardClick = async (mediaItemId) => {
     try {
-      const accessToken = localStorage.getItem("token");
-
-      // Make call to backend api
-      const response = await fetch(`/api/watchlist/media_item/${mediaItemId}`, {
-        method: "GET",
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
+      // Make call to backend
+      const response = await api.get(`/watchlist/media_item/${mediaItemId}`);
 
       // Parse  response data
-      const data = await response.json();
-
-      // Check if response is valid
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to fetch title details");
-      }
+      const data = await response.data;
 
       // Store title details
       setSelectedItem(data.watchlist_item_details);
@@ -86,21 +69,11 @@ export default function Watchlist() {
   const handleDelete = async () => {
     if (!itemToDelete) return;
     try {
-      const accessToken = localStorage.getItem("token");
-
-      // Make call to backend api
-      const response = await fetch(`/api/watchlist/item/${itemToDelete}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
+      // Make call to backend
+      const response = await api.delete(`/watchlist/item/${itemToDelete}`);
 
       // Parse data
-      const data = await response.json();
-
-      // Check if response is valid
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to delete title");
-      }
+      const data = await response.data;
 
       // Store response
       setDeleteMsg(data.message);
@@ -220,10 +193,7 @@ export default function Watchlist() {
               className="modal-close-btn"
               onClick={() => setIsModalOpen(false)}
             >
-              <X 
-                size={25}
-                strokeWidth={2.5}
-              />
+              <X size={25} strokeWidth={2.5} />
             </button>
             <div className="img-container">
               {selectedItem.poster_path && (

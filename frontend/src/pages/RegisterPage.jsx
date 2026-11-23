@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../utils/api.js";
 
 export default function Register() {
   const [firstName, setFirstName] = useState("");
@@ -17,19 +18,15 @@ export default function Register() {
 
     // Call Register route from backend api
     try {
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ firstName, lastName, email, password }),
+      const response = await api.post("/auth/register", {
+        firstName,
+        lastName,
+        email,
+        password,
       });
 
       // store response
-      const data = await response.json();
-
-      // Check if response is valid
-      if (!response.ok) {
-        throw new Error(data.message || "Registration failed");
-      }
+      const data = await response.data;
 
       // Set JWT token to browser storage
       localStorage.setItem("token", data.accessToken);

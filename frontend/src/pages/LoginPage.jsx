@@ -1,4 +1,5 @@
 import { useState } from "react";
+import api from "../utils/api.js";
 import { useNavigate } from "react-router-dom";
 import { Info } from "lucide-react";
 
@@ -18,19 +19,10 @@ export default function Login() {
 
     // Call login route from backend api
     try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await api.post("/auth/login", { email, password });
 
       // Store response
-      const data = await response.json();
-
-      // Check if response is valid
-      if (!response.ok) {
-        throw new Error(data.message || "Login failed");
-      }
+      const data = await response.data;
 
       // Set JWT token to browser storage
       localStorage.setItem("token", data.accessToken);
@@ -38,7 +30,11 @@ export default function Login() {
       // Redirect user to their watchlist
       navigate("/watchlist");
     } catch (err) {
-      setError(err.message);
+      setError(
+        err.response?.request?.status === 401
+          ? err.response.data.message
+          : "Unable to reach server. Please try again. "
+      );
     }
   };
 
@@ -52,9 +48,6 @@ export default function Login() {
     <div className="login-container">
       <h1>SCREENi</h1>
       <h3>The App Created To Tackle Your Backlog</h3>
-
-      {/* Render error message if one exists */}
-      {error && <p className="error-banner">{error}</p>}
 
       <div className="login-form-container">
         <h3>Login</h3>
@@ -78,6 +71,8 @@ export default function Login() {
               required
             />
           </div>
+          {/* Render error message if one exists */}
+          {error && <p className="error-banner">{error}</p>}
 
           <button type="submit">Log In</button>
         </form>

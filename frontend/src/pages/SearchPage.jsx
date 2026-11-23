@@ -1,4 +1,5 @@
 import { useState } from "react";
+import api from "../utils/api.js";
 import Navbar from "../components/Navbar.jsx";
 import { Plus, Search } from "lucide-react";
 
@@ -13,25 +14,11 @@ export default function SearchPage() {
     setError("");
 
     try {
-      // Get user's credentials
-      const accessToken = localStorage.getItem("token");
-
       // Call backend api
-      const response = await fetch(
-        `/api/search?query=${encodeURIComponent(query)}`,
-        {
-          method: "GET",
-          headers: { Authorization: `Bearer ${accessToken}` },
-        }
-      );
+      const response = await api.get(`/search?query=${encodeURIComponent(query)}`);
 
       // Parse data
-      const data = await response.json();
-
-      // Check if response is valid
-      if (!response.ok) {
-        throw new Error(data.message || "Search failed");
-      }
+      const data = await response.data;
 
       // Convert media type to match backend structure
       const formattedData = data.map((item) => ({
@@ -49,25 +36,8 @@ export default function SearchPage() {
   // Add search result to watchlist
   const handleAddToWatchlist = async (tmdbId, mediaType) => {
     try {
-      // Get user credentials
-      const accessToken = localStorage.getItem("token");
-
-      const response = await fetch("/api/watchlist", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({ tmdb_id: tmdbId, type: mediaType }),
-      });
-
-      // Parse data
-      const data = await response.json();
-
-      // Check if response is valid
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to add title");
-      }
+      // Call backend api
+      await api.post('/watchlist', {tmdb_id: tmdbId, type: mediaType}); 
 
       alert("Successfully added to watchlist!");
     } catch (err) {
