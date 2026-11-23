@@ -71,7 +71,7 @@ export default function Rando() {
         {watchlist.length === 0 ? (
           <div className="rando-empty-msg">
             <p>Your watchlist is empty</p>
-            <p>Go add some titles and come back to use Rando</p>
+            <p>Go add some titles and come back!</p>
           </div>
         ) : null}
 

@@ -124,10 +124,10 @@ export default function Watchlist() {
 
       <div className="watchlist-grid">
         {watchlist.length === 0 ? (
-          <>
-            <p>Your watchlist is empty!</p>
+          <div className="empty-list-msg">
+            <p>Your watchlist is empty</p>
             <p>Go search up some titles!</p>
-          </>
+          </div>
         ) : (
           sortedWatchlist.map((item) => (
             <div
