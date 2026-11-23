@@ -33,5 +33,7 @@ app.use(errorHandler);
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`Server is running successfully, press CTRL+C to exit.`);
+  console.log(
+    `Server is running successfully http://localhost:${PORT}, press CTRL+C to exit.`
+  );
 });
